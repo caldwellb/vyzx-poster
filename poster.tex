@@ -1,15 +1,15 @@
-% Gemini theme
+%Introduction
 % https://github.com/anishathalye/gemini
 
 \documentclass[final]{beamer}
 
 % ====================
-% Packages
+% Packages for Theme
 % ====================
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[size=custom,width=120,height=72,scale=1.0]{beamerposter}
+\usepackage[size=a0,scale=1.0]{beamerposter}
 \usetheme{gemini}
 \usecolortheme{gemini}
 \usepackage{graphicx}
@@ -35,20 +35,19 @@
 % Title
 % ====================
 
-\title{Some fancy title: followed by some more text}
+\title{VyZX: Verifying the ZX Calculus}
 
-\author{Alyssa P. Hacker \inst{1} \and Ben Bitdiddle \inst{2} \and Lem E. Tweakit \inst{2}}
+\author{Adrian Lehmann \inst{1} \and Ben Caldwell \inst{1} \and Robert Rand \inst{1}}
 
-\institute[shortinst]{\inst{1} Some Institute \samelineand \inst{2} Another Institute}
+\institute[shortinst]{\inst{1} University of Chicago}
 
 % ====================
 % Footer (optional)
 % ====================
 
-\footercontent{
-  \href{https://www.example.com}{https://www.example.com} \hfill
-  ABC Conference 2025, New York --- XYZ-1234 \hfill
-  \href{mailto:alyssa.p.hacker@example.com}{alyssa.p.hacker@example.com}}
+% \footercontent{
+%   ICFP 2022 \hfill
+%   \href{mailto:caldwellb@uchicago.edu}{caldwellb@uchicago.edu}}
 % (can be left out to remove footer)
 
 % ====================
@@ -56,8 +55,113 @@
 % ====================
 
 % use this to include logos on the left and/or right side of the header:
-% \logoright{\includegraphics[height=7cm]{logo1.pdf}}
+% \logoright{\includegraphics[height=7cm]{logo1.png}}
 % \logoleft{\includegraphics[height=7cm]{logo2.pdf}}
+
+% ====================
+% Tikz setup
+% ====================
+\usepackage{tikz}
+
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes,shapes.geometric,shapes.misc}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.markings}
+
+\tikzstyle{every picture}=[baseline=-0.25em]
+
+\pgfkeys{/tikz/tikzit fill/.initial=0}
+\pgfkeys{/tikz/tikzit draw/.initial=0}
+\pgfkeys{/tikz/tikzit shape/.initial=0}
+\pgfkeys{/tikz/tikzit category/.initial=0}
+
+\newcommand{\tikzfig}[1]{%
+\IfFileExists{#1.tikz}
+  {\input{#1.tikz}}
+  {%
+    \IfFileExists{./figures/#1.tikz}
+      {\input{./figures/#1.tikz}}
+      {\tikz[baseline=-0.5em]{\node[draw=red,font=\color{red},fill=red!10!white] {\textit{#1}};}}%
+  }%
+}
+\newcommand{\ctikzfig}[1]{%
+\begin{center}\rm
+  \tikzfig{#1}
+\end{center}}
+
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{background, edgelayer, nodelayer, main}
+\tikzstyle{none}=[inner sep=0mm]
+\tikzstyle{every loop}=[]
+\tikzstyle{mark coordinate}=[inner sep=0pt,outer sep=0pt,minimum size=3pt,fill=black,circle]
+\input{zh.tikzdefs}
+\input{zh.tikzstyles}
+
+% ====================
+% Packages for Paper
+% ====================
+
+\usepackage{mathpartir}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{graphicx}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\usepackage{hyperref}
+% \usepackage[noabbrev,nameinlink]{cleveref}
+
+\usepackage{braket}
+
+\usepackage{wrapfig}
+
+% ====================
+% Custom Commands
+% ====================
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+
+\newcommand{\oftype}[2]{\text{#1}\,:\,\text{#2}}
+\newcommand{\ZX}[2]{\texttt{ZX}\,\,\text{#1}\,\,\text{#2}}
+\newcommand{\nat}{\texttt{nat}}
+
+\newcommand{\VyZX}{\textsl{Vy}\textsc{ZX}\xspace}
+\newcommand{\SQIR}{\textsc{sqir}\xspace}
+\newcommand{\QASM}{\texttt{QASM}\xspace}
+\newcommand{\QLib}{\texttt{QuantumLib}\xspace}
+\newcommand{\pyZX}{PyZX\xspace}
+\newcommand{\VOQC}{\textsc{Voqc}\xspace}
+\newcommand{\QWIRE}{\texttt{QWIRE}\xspace}
+\newcommand{\inQWIRE}{\texttt{inQWIRE}\xspace}
+\newcommand{\certiq}{\texttt{CertiQ}\xspace}
+\newcommand{\tket}{\texttt{t\(\ket{\text{ket}}\)}\xspace}
+\newcommand{\quartz}{Quartz\xspace}
+
+\algnewcommand\algorithmicswitch{\textbf{switch}}
+\algnewcommand\algorithmiccase{\textbf{case}}
+\algnewcommand\algorithmicassert{\texttt{assert}}
+
+\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\ \algorithmicdo}{\algorithmicend\ \algorithmicswitch}%
+\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1}{\algorithmicend\ \algorithmiccase}%
+\algtext*{EndSwitch}%
+\algtext*{EndCase}%
+
+\newcommand{\vyzxwire}{\text{\----}}
+\newcommand{\vyzxcap}{\subset}
+\newcommand{\vyzxcup}{\supset}
+\newcommand{\vyzxcompose}{\longleftrightarrow}
+\newcommand{\vyzxstack}{\updownarrow}
+\newcommand{\vyzxswap}{\times}
+\newcommand{\vyzxempty}{\reflectbox{$\varnothing$}}
+\newcommand{\Z}[3]{\texttt{Z\_spider #1 #2#3}}
+\newcommand{\X}[3]{\texttt{X\_spider #1 #2#3}}
 
 % ====================
 % Body
@@ -71,65 +175,105 @@
 
 \begin{column}{\colwidth}
 
-  \begin{block}{A block title}
+  \begin{block}{Why Verify}
 
-    Some block contents, followed by a diagram, followed by a dummy paragraph.
+    As quantum computers transition from fiction to a feature of our daily lives, there has been a surge of interest in quantum optimizers~\cite{nam2018automated,shi2019certiq,smith2019quantum,kissinger2020Pyzx,Amy2019,mingkuan2022quartz}. 
+    %
+    The goal of a quantum optimizer is to reduce the number of bottlenecks in a quantum circuit, whether those be two-qubit gates in the near term or $T$ gates in the longer term. 
+    %
+    Many of these optimizers do some form of model checking~\cite{shi2019certiq,mingkuan2022quartz} or translation validation~\cite{smith2019quantum,kissinger2020Pyzx} to gain confidence that their optimizations are correct, out of awareness that bugs in quantum optimizers are both common and costly~\cite{kissinger2020Pyzx}. 
+    %
+    Of particular note, the \VOQC compiler~\cite{hietala-et-al-2021-VOQC} is fully verified in the Coq proof assistant, guaranteeing that its optimizations preserve the semantics of the original quantum circuit.
+
+    Unfortunately, the quantum circuit model has many weaknesses, particularly from an optimization perspective. 
+    %
+    The variety of different gate sets and the rigidity of large sequences of gates vertically and horizontally goes against what an optimizer cares about: the connections between gates.
+    %
+    In this spirit, Kissinger and van de Wetering developed PyZX~\cite{kissinger2020Pyzx}, an optimizer for the ZX calculus~\cite{coecke-duncan-zx}, a graphical language for quantum computing in which \emph{only connectivity matters}~\cite{coecke-kissinger-2017-picturing-q-proc}. 
+    %
+    Like prior tools \pyZX checks for correctness by translation validation, ``optimizing'' a circuit concatenated with its adjoint, and checking to see if it returns the identity.
+    %
+    Unfortunately, these methods are slow and are not guaranteed to succeed as showing circuit equivalence is known to be QMA-complete in the general case~\cite{janzing2003-id-qma}.
+
+    Drawing inspiration from \VOQC and \pyZX and the verified classical compiler CompCert~\cite{leroy2009compcert}, we present \VyZX, a formalization of the ZX calculus in the Coq~\cite{Coq12} proof assistant. 
+    %
+    \VyZX is intended to be a fully verified implementation of the \pyZX compiler and a platform for mechanized reasoning about the ZX calculus and related graphical calculi. Given the versatility of the ZX-calculus, 
+    %
+    \VyZX should allow us to tackle correctness issues in a range of domains, including lattice surgery~\cite{deBeaudrap2020zxcalculusis}, circuit simulation~\cite{kissinger2020simulation}, and natural language processing~\cite{coecke2020nlpzx}.
+
+  \end{block}
+%
+  \begin{block}{Drawing Inspiration}
+
+    For inspiration, we looked at diagrams for symmetric monoidal categories as described by Selinger~\cite{Selinger2010}.
+%
+    We reduced the basic requirements for our string diagrams to:
+    \begin{enumerate}
+      \item The unit object, which is the empty diagram,
+      \item The single wire,
+      \item Morphisms, which take $n$ inputs to $m$ outputs,
+      \item Braids, which swap two wires,
+      \item Sequential composition, which composes two diagrams in sequence , and
+      \item Tensor products, which arrange two diagrams in parallel.
+    \end{enumerate}
 
     \begin{figure}
-      \centering
-      \begin{tikzpicture}[scale=6]
-        \draw[step=0.25cm,color=gray] (-1,-1) grid (1,1);
-        \draw (1,0) -- (0.2,0.2) -- (0,1) -- (-0.2,0.2) -- (-1,0)
-          -- (-0.2,-0.2) -- (0,-1) -- (0.2,-0.2) -- cycle;
-      \end{tikzpicture}
-      \caption{A figure caption.}
+      % \centering
+      \tikzfig{swap-string}
+      \qquad
+      \tikzfig{compose_string}
+      \qquad
+      \tikzfig{parallel_string}
+      \qquad
+      \tikzfig{cap}
+      \quad
+      \tikzfig{cup}
+      \caption{\centering From left to right, the braid, sequential composition, tensor product, cap, and cup for symmetric monoidal string diagrams.}\label{fig:string}
     \end{figure}
 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ultricies
-    eget libero ac ullamcorper. Integer et euismod ante. Aenean vestibulum
-    lobortis augue, ut lobortis turpis rhoncus sed. Proin feugiat nibh a
-    lacinia dignissim. Proin scelerisque, risus eget tempor fermentum, ex
-    turpis condimentum urna, quis malesuada sapien arcu eu purus.
-
   \end{block}
 
-  \begin{block}{A block containing a list}
+  \begin{alertblock}{Inductive Diagrams}
 
-    Nam vulputate nunc felis, non condimentum lacus porta ultrices. Nullam sed
-    sagittis metus. Etiam consectetur gravida urna quis suscipit.
+    The above requirements can be easily translated into inductive constructors.
+    %
+    To get the full ZX diagrams, we need to add our signature of Z spiders and X spiders.
+    %
+    If we want to implement a different diagrammatic language, we could easily change this signature.
 
-    \begin{itemize}
-      \item \textbf{Mauris tempor} risus nulla, sed ornare
-      \item \textbf{Libero tincidunt} a duis congue vitae
-      \item \textbf{Dui ac pretium} morbi justo neque, ullamcorper
-    \end{itemize}
+    \begin{figure}[t]
+      \centering
+      \begin{align*}
+        \inferrule
+          {\oftype{in out}{\(\N\)} \\ \oftype{\(\alpha\)}{\(\R\)}}
+          {\oftype{\texttt{Z Spider} in out \(\alpha\)}{\ZX{in}{out}}}
+        \hspace{1em}&\hspace{1em}
+        \inferrule
+          {\oftype{in out}{\(\N\)} \\ \oftype{\(\alpha\)}{\(\R\)}}
+          {\oftype{\texttt{X Spider} in out \(\alpha\)}{\ZX{in}{out}}}
+        \\
+        \inferrule{ }{\oftype{\texttt{Cap}}{\ZX{0}{2}}}
+        \hspace{2em}
+        \inferrule{ }{\oftype{\texttt{Cup}}{\ZX{2}{0}}}
+        \hspace{1em}&\hspace{1em}
+        \inferrule{ }{\oftype{\texttt{Swap}}{\ZX{2}{2}}}
+        \hspace{2em}
+        \inferrule{ }{\oftype{\texttt{Empty}}{\ZX{0}{0}}}
+        \\
+        \inferrule
+          {\oftype{zx1}{\ZX{in}{mid}} \\ \oftype{zx2}{\ZX{mid}{out}}}
+          {\oftype{\texttt{Compose} zx1 zx2}{\ZX{in}{out}}}
+        \hspace{1em}&\hspace{1em}
+        \inferrule
+          {\oftype{zx1}{\ZX{in1}{out1}} \\ \oftype{zx2}{\ZX{in2}{out2}}}
+          {\oftype{\texttt{Stack} zx1 zx2}{\ZX{(in1 + in2)}{(out1 + out2)}}}
+      \end{align*}
+      \caption{The inductive constructors for block representation ZX diagrams}\label{fig:blockconstructors}
+    \end{figure}
 
-    Eget augue porta, bibendum venenatis tortor.
-
-  \end{block}
-
-  \begin{alertblock}{A highlighted block}
-
-    This block catches your eye, so \textbf{important stuff} should probably go
-    here.
-
-    Curabitur eu libero vehicula, cursus est fringilla, luctus est. Morbi
-    consectetur mauris quam, at finibus elit auctor ac. Aliquam erat volutpat.
-    Aenean at nisl ut ex ullamcorper eleifend et eu augue. Aenean quis velit
-    tristique odio convallis ultrices a ac odio.
-
-    \begin{itemize}
-      \item \textbf{Fusce dapibus tellus} vel tellus semper finibus. In
-        consequat, nibh sed mattis luctus, augue diam fermentum lectus.
-      \item \textbf{In euismod erat metus} non ex. Vestibulum luctus augue in
-        mi condimentum, at sollicitudin lorem viverra.
-      \item \textbf{Suspendisse vulputate} mauris vel placerat consectetur.
-        Mauris semper, purus ac hendrerit molestie, elit mi dignissim odio, in
-        suscipit felis sapien vel ex.
-    \end{itemize}
-
-    Aenean tincidunt risus eros, at gravida lorem sagittis vel. Vestibulum ante
-    ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.
+    With these constructors we will be able to use the powerful induction tactic in Coq to prove facts about ZX diagrams. 
+    %
+    We must give these diagrams a semantics in order to accomplish proof. Our semantics are embedded within \QLib, a Coq library focused on quantum computing.
 
   \end{alertblock}
 
@@ -139,89 +283,137 @@
 
 \begin{column}{\colwidth}
 
-  \begin{block}{A block containing an enumerated list}
+  \begin{block}{Diagram Semantics}
 
-    Vivamus congue volutpat elit non semper. Praesent molestie nec erat ac
-    interdum. In quis suscipit erat. \textbf{Phasellus mauris felis, molestie
-    ac pharetra quis}, tempus nec ante. Donec finibus ante vel purus mollis
-    fermentum. Sed felis mi, pharetra eget nibh a, feugiat eleifend dolor. Nam
-    mollis condimentum purus quis sodales. Nullam eu felis eu nulla eleifend
-    bibendum nec eu lorem. Vivamus felis velit, volutpat ut facilisis ac,
-    commodo in metus.
+    \begin{columns}
 
-    \begin{enumerate}
-      \item \textbf{Morbi mauris purus}, egestas at vehicula et, convallis
-        accumsan orci. Orci varius natoque penatibus et magnis dis parturient
-        montes, nascetur ridiculus mus.
-      \item \textbf{Cras vehicula blandit urna ut maximus}. Aliquam blandit nec
-        massa ac sollicitudin. Curabitur cursus, metus nec imperdiet bibendum,
-        velit lectus faucibus dolor, quis gravida metus mauris gravida turpis.
-      \item \textbf{Vestibulum et massa diam}. Phasellus fermentum augue non
-        nulla accumsan, non rhoncus lectus condimentum.
-    \end{enumerate}
+      \begin{column}{0.48\colwidth}
+        \justify
+    
+        Given our inductive definition for ZX diagrams, we can write a simple function (\ref{alg:sem}) for computing the semantics of a given ZX diagram.
+        %
+        We use the matrix definition given in \QLib~\cite{QuantumLib} to compute the semantics.
+        %
+        In \QLib a matrix is simply a function with type $\N \to \N \to \C$ that takes in a row and column index and returns the associated complex number.
+        %
+        First, we define the Z and X spider semantics, letting $\times$ be matrix multiplication\footnote{We chose to align our notation with \QLib rather than mathematical convention.}, $I_{m\times n}$ be the $m$ by $n$ identity matrix, $H$ be the Hadamard matrix, $\otimes$ the Kronecker product, and $H^{\otimes n}$ be the $n$th power of $H$ with the Kronecker product.
+        %
+        With spider semantics complete, we define our other base constructors, stacks and composes using the Kronecker and matrix products.
+        %
+        %For this, we let $\otimes$ be the Kronecker product.
 
+      \end{column}
+      \begin{column}{0.48\colwidth}
+        \begin{algorithm}[H]
+          \caption{ZX Diagram Semantics}\label{alg:sem}
+          \scriptsize
+          \begin{algorithmic}
+            \Function{Z\_Spider\_semantics}{in, out, $\alpha$}
+                \State \Return \(\begin{bmatrix}
+                                    1 & 0 & \cdots & 0 & 0\\
+                                    0 & 0 & \cdots & 0 & 0\\
+                                    \vdots & & \ddots & & \vdots\\
+                                    0 & 0 & \cdots & 0 & 0\\
+                                    0 & 0 & \cdots & 0 & e^{i\alpha}\\
+                                \end{bmatrix}\)
+                                % \Comment Equivalent to \(\underbrace{\ket{0}\cdots\ket{0}}_{out}  \underbrace{\bra{0}\cdots\bra{0}}_{in} + e^{i\alpha} \underbrace{\ket{1}\cdots\ket{1}}_{out} \underbrace{\bra{1}\cdots\bra{1}}_{in}\)
+            \EndFunction
+
+          \Function{X\_Spider\_semantics}{in, out, $\alpha$}
+            \State \Return \(H^{\otimes\text{out}}\) \(\times\) \Call{Z\_Spider\_semantics}{in, out, $\alpha$} \(\times\) \(H^{\otimes\text{in}}\)
+            % \Comment Equivalent to \(\underbrace{\ket{+}\cdots\ket{+}}_{out}  \underbrace{\bra{+}\cdots\bra{+}}_{in} + e^{i\alpha} \underbrace{\ket{-}\cdots\ket{-}}_{out} \underbrace{\bra{-}\cdots\bra{-}}_{in}\)
+          \EndFunction
+            \Function{ZX\_semantics}{zx : ZX in out} : \(\C^{\text{in} \times \text{out}}\)
+                \Switch{zx}
+                \Case{Empty} 
+                  \State \Return $I_{1 \times 1}$ \EndCase
+                \Case{Swap} 
+                  \State \Return \(\begin{bmatrix}1,0,0,0\\0,0,1,0\\0,1,0,0\\0,0,0,1\end{bmatrix}\) \EndCase
+                \Case{Cap} 
+                  \State \Return \(\begin{bmatrix}1,0,0,1\end{bmatrix}^T\) \EndCase
+                \Case{Cup} 
+                  \State \Return \(\begin{bmatrix}1,0,0,1\end{bmatrix}\) \EndCase
+                \Case{Z\_Spider in out $\alpha$} 
+                  \State \Return \Call{Z\_Spider\_semantics}{in, out, $\alpha$} \EndCase
+                \Case{X\_Spider in, out $\alpha$} 
+                  \State \Return \Call{X\_Spider\_semantics}{in, out, $\alpha$} \EndCase
+                \Case{Stack zx1 zx2} 
+                  \State \Return \Call{ZX\_semantics}{zx1} $\otimes$ \Call{ZX\_semantics}{zx2} \EndCase
+                \Case{Compose zx1 zx2} 
+                  \State \Return \Call{ZX\_semantics}{zx2} $\times$ \Call{ZX\_semantics}{zx1} \EndCase
+                \EndSwitch
+            \EndFunction
+          \end{algorithmic}
+        \end{algorithm}
+      \end{column}
+    \end{columns}
   \end{block}
 
-  \begin{block}{Fusce aliquam magna velit}
+  \begin{block}{Proportionality}
 
-    Et rutrum ex euismod vel. Pellentesque ultricies, velit in fermentum
-    vestibulum, lectus nisi pretium nibh, sit amet aliquam lectus augue vel
-    velit. Suspendisse rhoncus massa porttitor augue feugiat molestie. Sed
-    molestie ut orci nec malesuada. Sed ultricies feugiat est fringilla
-    posuere.
-
-    \begin{figure}
-      \centering
-      \begin{tikzpicture}
-        \begin{axis}[
-            scale only axis,
-            no markers,
-            domain=0:2*pi,
-            samples=100,
-            axis lines=center,
-            axis line style={-},
-            ticks=none]
-          \addplot[red] {sin(deg(x))};
-          \addplot[blue] {cos(deg(x))};
-        \end{axis}
-      \end{tikzpicture}
-      \caption{Another figure caption.}
-    \end{figure}
-
+    % We cannot just consider two ZX diagrams equivalent if they are syntactically equivalent but rather if they are semantically equivalent.
+    Trivially two syntactically equal diagrams are to be considered equal.
+    %
+    For making useful statements, however, we require a notion of semantic equivalence.
+    %
+    Intuitively, one might define that as equivalence of matrices produced by \texttt{ZX\_semantics} (as shown in \ref{alg:sem}).
+    %
+    In the ZX calculus, though, we only care about equivalence up to multiplication by a constant factor, as rules will introduce constant factors and we are able to rebuild any constant factor if necessary using ZX constructions~\cite{vandewetering2020zxcalculus}.
+    
+    Within \VyZX we define a relation called \textit{proportional} and give it the notation $\propto$.
+    %
+    We say 
+    %
+    $zx_1 \propto zx_2$ if there is a non-zero complex number $c$ such that 
+    %
+    \texttt{ZX\_semantics} $zx_1$ = $c * {}$ \texttt{ZX\_semantics} $zx_2$.
+    %
+    We prove that $\propto$ is an equivalence relation as we might expect.
+    % 
+    We then prove that our composition operators respect proportionality: That is, if $zx_1 \propto zx_1'$ and $zx_2 \propto zx_2'$ then $\texttt{Compose}~zx_1~zx_2 \propto \texttt{Compose}~zx_1'~zx_2'$ and $\texttt{Stack}~zx_1~zx_2 \propto \texttt{Stack}~zx_1'~zx_2'$. We add this fact to Coq as a \emph{parametric morphism}, allowing us to rewrite using our equivalences even inside a broader diagram.
+    %
+    With proportionality defined, we proceed to verify different rewrite rules within the ZX calculus by proving their diagrams to be proportional.
   \end{block}
 
-  \begin{block}{Nam cursus consequat egestas}
+  \begin{block}{Coq Notations}
 
-    Nulla eget sem quam. Ut aliquam volutpat nisi vestibulum convallis. Nunc a
-    lectus et eros facilisis hendrerit eu non urna. Interdum et malesuada fames
-    ac ante \textit{ipsum primis} in faucibus. Etiam sit amet velit eget sem
-    euismod tristique. Praesent enim erat, porta vel mattis sed, pharetra sed
-    ipsum. Morbi commodo condimentum massa, \textit{tempus venenatis} massa
-    hendrerit quis. Maecenas sed porta est. Praesent mollis interdum lectus,
-    sit amet sollicitudin risus tincidunt non.
+    To improve both the readability and the writing of ZX diagrams, we use Coq's notation system to stand in for our inductive constructions.
+    %
+  We keep the notation for Z and X spiders as \texttt{Z\_spider in out rotation} and \texttt{X\_spider in out rotation}, but define the rest as in the following.
+    
+    \begin{center}
+      \begin{tabular}{|c|c|c|c|c|c|c|c|}
+        \hline
+        Constructor & Empty & Cap & Cup & Swap & Compose & Stack & \Z{1}{1}{0}\\
+        \hline
+        Notation & \vyzxempty & $\vyzxcap$ & $\vyzxcup$ & $\vyzxswap$ & $D_1 \vyzxcompose D_2$ & $D_1 \vyzxstack D_2$ & $\vyzxwire$ \\
+        \hline
+      \end{tabular}
+    \end{center}
 
-    Etiam sit amet tempus lorem, aliquet condimentum velit. Donec et nibh
-    consequat, sagittis ex eget, dictum orci. Etiam quis semper ante. Ut eu
-    mauris purus. Proin nec consectetur ligula. Mauris pretium molestie
-    ullamcorper. Integer nisi neque, aliquet et odio non, sagittis porta justo.
+    We also have a notation for \texttt{Z\_spider 1 1 0}, which is equivalent to a wire.
+    %
+    This allows us to translate gates into an easier to read textual diagram.
+    %
+    For example, the ZX diagram for cnot is given by
+    \[
+      CNOT_R := (\Z{1}{2}{0} \vyzxstack \vyzxwire) \vyzxcompose (\vyzxwire \vyzxstack \X{2}{1}{0})
+    \]
+    or similarly we can write it as
+    \[
+      CNOT_L := (\vyzxwire \vyzxstack \X{2}{1}{0}) \vyzxcompose (\Z{1}{2}{0} \vyzxstack \vyzxwire)
+    \]
+    and we can state the equivalence of these diagrams using proportionality using a Coq lemma
+    \[
+      \texttt{Lemma CNOT\_R\_PROP\_L : }CNOT_R \propto CNOT_L
+    \]
+    and prove its correctness by using matrix equivalence and the cnot matrix from \QLib.
+    \[
+      \texttt{Lemma CNOT\_CORRECT : }CNOT_R == cnot
+    \]
 
-    \begin{itemize}
-      \item \textbf{Sed consequat} id ante vel efficitur. Praesent congue massa
-        sed est scelerisque, elementum mollis augue iaculis.
-        \begin{itemize}
-          \item In sed est finibus, vulputate
-            nunc gravida, pulvinar lorem. In maximus nunc dolor, sed auctor eros
-            porttitor quis.
-          \item Fusce ornare dignissim nisi. Nam sit amet risus vel lacus
-            tempor tincidunt eu a arcu.
-          \item Donec rhoncus vestibulum erat, quis aliquam leo
-            gravida egestas.
-        \end{itemize}
-      \item \textbf{Sed luctus, elit sit amet} dictum maximus, diam dolor
-        faucibus purus, sed lobortis justo erat id turpis.
-      \item \textbf{Pellentesque facilisis dolor in leo} bibendum congue.
-        Maecenas congue finibus justo, vitae eleifend urna facilisis at.
-    \end{itemize}
+    Using these notations, statements about proofs in VyZX become far more readable.
+      
 
   \end{block}
 
@@ -231,75 +423,103 @@
 
 \begin{column}{\colwidth}
 
-  \begin{exampleblock}{A highlighted block containing some math}
+  \begin{exampleblock}{Current Status}
 
-    A different kind of highlighted block.
+    % \paragraph*{Common gates}
+    We translated common gates from the circuit model to the ZX-calculus and proved their semantic correctness.
+    
+    \begin{figure}
+      \centering
+      \tikzfig{gates}
+      \caption{\centering Quantum gates represented in the ZX calculus. Note that the $H$ node omits the its label and is common to ZX diagrams as syntactic sugar for the rotations above.}\label{fig:gates}
+    \end{figure}
 
-    $$
-    \int_{-\infty}^{\infty} e^{-x^2}\,dx = \sqrt{\pi}
-    $$
 
-    Interdum et malesuada fames $\{1, 4, 9, \ldots\}$ ac ante ipsum primis in
-    faucibus. Cras eleifend dolor eu nulla suscipit suscipit. Sed lobortis non
-    felis id vulputate.
+    \begin{columns}
+      \begin{column}{0.53\colwidth}
+        \justify
+        We proved the commutation of stack and compose with our language, an essential tool for most proof.
+        %
+        Another proof tool we created handles automatically swapping the colors of diagrams.
+        %
+        To accomplish this we first color swapped individual spiders by surrounding them with Hadamard gates.
+        We then use Coq's induction tactics, cover the other base cases, and define $\odot$ as a function which swaps a diagram's colors.
+        \quad\\
 
-    \heading{A heading inside a block}
+        The bialgebra rule, while not intuitive, is crucial for many ZX proofs as it allows for the rearranging of edges between nodes ~\cite{vandewetering2020zxcalculus}.
+        %
+        This proof ends up being computationally expensive to check, but it is a very necessary tool.
 
-    Praesent consectetur mi $x^2 + y^2$ metus, nec vestibulum justo viverra
-    nec. Proin eget nulla pretium, egestas magna aliquam, mollis neque. Vivamus
-    dictum $\mathbf{u}^\intercal\mathbf{v}$ sagittis odio, vel porta erat
-    congue sed. Maecenas ut dolor quis arcu auctor porttitor.
+        This incomplete form of the Hopf rule is a natural description for the inductive language defined here, and simply is 
+        \[
+          \Z{1}{2}{} \vyzxcompose \X{2}{1}{} \propto 
+        \] 
+        \[
+          \Z{1}{0}{} \vyzxcompose \X{0}{1}{}.
+        \]
 
-    \heading{Another heading inside a block}
+        \begin{figure}
+            \centering
+            \tikzfig{hopf}
+            \caption{\centering The Hopf rule}\label{fig:hopf}
+        \end{figure}
 
-    Sed augue erat, scelerisque a purus ultricies, placerat porttitor neque.
-    Donec $P(y \mid x)$ fermentum consectetur $\nabla_x P(y \mid x)$ sapien
-    sagittis egestas. Duis eget leo euismod nunc viverra imperdiet nec id
-    justo.
+      \end{column}
+      \begin{column}{0.37\colwidth}
+
+        \begin{figure}
+          \centering
+          \tikzfig{stack-compose-comm}
+          \caption{\centering The commutation of stack and compose}
+          \label{fig:stack-compose-comm}
+        \end{figure}
+        
+        \begin{figure}
+            \centering
+            \tikzfig{bihadamard}
+            \caption{\centering Swapping a spider's color using a bi-Hadamard construction}
+            \label{fig:bihadamard}
+        \end{figure}
+
+        \begin{figure}
+            \centering
+            \tikzfig{bihadamard-diag}
+            \caption{\centering Swapping colors of a diagram using a bi-Hadamard construction}
+            \label{fig:bihadamard-diag}
+        \end{figure}
+
+        \begin{figure}
+          \centering
+          \tikzfig{bi-alg}
+          \caption{\centering The bialgebra rule}\label{fig:bi-alg}
+        \end{figure}
+
+        \begin{figure}
+          \tikzfig{spider-fusion-1-1}
+          \caption{\centering Spider fusion rule}
+        \end{figure}
+
+      \end{column}
+
+    \end{columns}
+
+One of the most important rules is that spiders connected by an arbitrary (non-zero) number of edges can be fused into a single node with the angles added~\cite{vandewetering2020zxcalculus}.
+%
+Further, the reverse is true: any spider can be split such that the two new spiders add to the original angle.
+A corollary of this is that we can split phase-gadgets off nodes.
+
+Since this rule fundamentally works based on adjacency rather than block representation construction, we have not fully implemented it at the time of writing.
+We do have a restricted version proven where two nodes are just connected to each other by a single wire, which will form the basis of the general spider fusion proof.
+This allows us to use \QLib's algebraic rewrites of complex matrices to combine the angles easily.
+Given the algebraic rewrite this rule is computationally very efficient.
+
+
 
   \end{exampleblock}
 
-  \begin{block}{Nullam vel erat at velit convallis laoreet}
-
-    Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
-    inceptos himenaeos. Phasellus libero enim, gravida sed erat sit amet,
-    scelerisque congue diam. Fusce dapibus dui ut augue pulvinar iaculis.
-
-    \begin{table}
-      \centering
-      \begin{tabular}{l r r c}
-        \toprule
-        \textbf{First column} & \textbf{Second column} & \textbf{Third column} & \textbf{Fourth} \\
-        \midrule
-        Foo & 13.37 & 384,394 & $\alpha$ \\
-        Bar & 2.17 & 1,392 & $\beta$ \\
-        Baz & 3.14 & 83,742 & $\delta$ \\
-        Qux & 7.59 & 974 & $\gamma$ \\
-        \bottomrule
-      \end{tabular}
-      \caption{A table caption.}
-    \end{table}
-
-    Donec quis posuere ligula. Nunc feugiat elit a mi malesuada consequat. Sed
-    imperdiet augue ac nibh aliquet tristique. Aenean eu tortor vulputate,
-    eleifend lorem in, dictum urna. Proin auctor ante in augue tincidunt
-    tempor. Proin pellentesque vulputate odio, ac gravida nulla posuere
-    efficitur. Aenean at velit vel dolor blandit molestie. Mauris laoreet
-    commodo quam, non luctus nibh ullamcorper in. Class aptent taciti sociosqu
-    ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-    Nulla varius finibus volutpat. Mauris molestie lorem tincidunt, iaculis
-    libero at, gravida ante. Phasellus at felis eu neque suscipit suscipit.
-    Integer ullamcorper, dui nec pretium ornare, urna dolor consequat libero,
-    in feugiat elit lorem euismod lacus. Pellentesque sit amet dolor mollis,
-    auctor urna non, tempus sem.
-
-  \end{block}
-
   \begin{block}{References}
 
-    \nocite{*}
-    \footnotesize{\bibliographystyle{plain}\bibliography{poster}}
+    {\tiny \bibliographystyle{plain}\bibliography{poster}}
 
   \end{block}
 
@@ -308,5 +528,4 @@
 \separatorcolumn
 \end{columns}
 \end{frame}
-
 \end{document}
