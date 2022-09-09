@@ -1,23 +1,42 @@
 %Introduction
-% https://github.com/anishathalye/gemini
+% See: https://rev.cs.uchicago.edu/k4rtik/gemini-uccs
+% A fork of https://github.com/anishathalye/gemini
 
 \documentclass[final]{beamer}
 
 % ====================
-% Packages for Theme
+% Packages
 % ====================
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[size=a0,scale=1.0]{beamerposter}
 \usetheme{gemini}
-\usecolortheme{gemini}
+\usecolortheme{uchicago}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{tikz}
 \usepackage{pgfplots}
-\pgfplotsset{compat=1.14}
+\pgfplotsset{compat=1.17}
 
+\usepackage{amsmath,amsfonts}
+\usepackage{tikz}
+\usetikzlibrary{shapes}
+\usetikzlibrary{decorations.pathreplacing}
+\usepackage{changepage}
+\usepackage{braket}
+\usepackage{physics}
+\usepackage{mathpartir}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage{xspace}
+\usepackage{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage{paralist}
+\usepackage[normalem]{ulem}
+
+\usepackage{bussproofs}
 % ====================
 % Lengths
 % ====================
@@ -37,9 +56,9 @@
 
 \title{VyZX: Verifying the ZX Calculus}
 
-\author{Adrian Lehmann \inst{1} \and Ben Caldwell \inst{1} \and Robert Rand \inst{1}}
+\author{Adrian Lehmann \and \textbf{Ben Caldwell} \and Robert Rand}
 
-\institute[shortinst]{\inst{1} University of Chicago}
+\institute[shortinst]{University of Chicago}
 
 % ====================
 % Footer (optional)
@@ -48,15 +67,15 @@
 % \footercontent{
 %   ICFP 2022 \hfill
 %   \href{mailto:caldwellb@uchicago.edu}{caldwellb@uchicago.edu}}
-% (can be left out to remove footer)
+% % (can be left out to remove footer)
 
 % ====================
 % Logo (optional)
 % ====================
 
 % use this to include logos on the left and/or right side of the header:
-% \logoright{\includegraphics[height=7cm]{logo1.png}}
-% \logoleft{\includegraphics[height=7cm]{logo2.pdf}}
+\logoright{\includegraphics[height=7cm]{logos/cs-logo-white.png}}
+\logoleft{\includegraphics[height=4cm]{logos/uc-logo-white.eps}}
 
 % ====================
 % Tikz setup
@@ -137,7 +156,7 @@
 \newcommand{\QASM}{\texttt{QASM}\xspace}
 \newcommand{\QLib}{\texttt{QuantumLib}\xspace}
 \newcommand{\pyZX}{PyZX\xspace}
-\newcommand{\VOQC}{\textsc{Voqc}\xspace}
+\newcommand{\VOQC}{V{\small OQC}\xspace}
 \newcommand{\QWIRE}{\texttt{QWIRE}\xspace}
 \newcommand{\inQWIRE}{\texttt{inQWIRE}\xspace}
 \newcommand{\certiq}{\texttt{CertiQ}\xspace}
@@ -175,31 +194,40 @@
 
 \begin{column}{\colwidth}
 
-  \begin{block}{Why Verify}
+  \begin{block}{Verification and the ZX-Calculus}
 
-    As quantum computers transition from fiction to a feature of our daily lives, there has been a surge of interest in quantum optimizers~\cite{nam2018automated,shi2019certiq,smith2019quantum,kissinger2020Pyzx,Amy2019,mingkuan2022quartz}. 
+\begin{wrapfigure}{r}{0.15\textwidth}
+  \begin{center}
+    \includegraphics[width=0.15\textwidth]{logos/coq-logo-medium.png}
+  \end{center}
+\end{wrapfigure}
+%
+\textbf{The Coq Proof Assistant} 
+    As quantum computers transition from fiction to a feature of our daily lives, there has been a surge of interest in quantum optimizers~\cite{kissinger2020Pyzx}. 
     %
     The goal of a quantum optimizer is to reduce the number of bottlenecks in a quantum circuit, whether those be two-qubit gates in the near term or $T$ gates in the longer term. 
     %
-    Many of these optimizers do some form of model checking~\cite{shi2019certiq,mingkuan2022quartz} or translation validation~\cite{smith2019quantum,kissinger2020Pyzx} to gain confidence that their optimizations are correct, out of awareness that bugs in quantum optimizers are both common and costly~\cite{kissinger2020Pyzx}. 
+    Many of these optimizers do some form of model checking or translation validation to gain confidence that their optimizations are correct, out of awareness that bugs in quantum optimizers are both common and costly. 
     %
     Of particular note, the \VOQC compiler~\cite{hietala-et-al-2021-VOQC} is fully verified in the Coq proof assistant, guaranteeing that its optimizations preserve the semantics of the original quantum circuit.
 
+    \textbf{The ZX Calculus}
     Unfortunately, the quantum circuit model has many weaknesses, particularly from an optimization perspective. 
     %
     The variety of different gate sets and the rigidity of large sequences of gates vertically and horizontally goes against what an optimizer cares about: the connections between gates.
     %
-    In this spirit, Kissinger and van de Wetering developed PyZX~\cite{kissinger2020Pyzx}, an optimizer for the ZX calculus~\cite{coecke-duncan-zx}, a graphical language for quantum computing in which \emph{only connectivity matters}~\cite{coecke-kissinger-2017-picturing-q-proc}. 
+    In this spirit, Kissinger and van de Wetering developed PyZX~\cite{kissinger2020Pyzx}, an optimizer for the ZX calculus~\cite{coecke-duncan-zx}, a graphical language for quantum computing in which \emph{only connectivity matters}. 
     %
     Like prior tools \pyZX checks for correctness by translation validation, ``optimizing'' a circuit concatenated with its adjoint, and checking to see if it returns the identity.
     %
-    Unfortunately, these methods are slow and are not guaranteed to succeed as showing circuit equivalence is known to be QMA-complete in the general case~\cite{janzing2003-id-qma}.
+    Unfortunately, these methods are slow and are not guaranteed to succeed as showing circuit equivalence is known to be QMA-complete in the general case.
 
-    Drawing inspiration from \VOQC and \pyZX and the verified classical compiler CompCert~\cite{leroy2009compcert}, we present \VyZX, a formalization of the ZX calculus in the Coq~\cite{Coq12} proof assistant. 
+    \textbf{Verifying ZX}
+    Drawing inspiration from \VOQC and \pyZX and the verified classical compiler CompCert, we present \VyZX, a formalization of the ZX calculus in the Coq~\cite{Coq12} proof assistant. 
     %
     \VyZX is intended to be a fully verified implementation of the \pyZX compiler and a platform for mechanized reasoning about the ZX calculus and related graphical calculi. Given the versatility of the ZX-calculus, 
     %
-    \VyZX should allow us to tackle correctness issues in a range of domains, including lattice surgery~\cite{deBeaudrap2020zxcalculusis}, circuit simulation~\cite{kissinger2020simulation}, and natural language processing~\cite{coecke2020nlpzx}.
+    \VyZX should allow us to tackle correctness issues in a range of domains, including lattice surgery, circuit simulation, and natural language processing.
 
   \end{block}
 %
@@ -296,7 +324,7 @@
         %
         In \QLib a matrix is simply a function with type $\N \to \N \to \C$ that takes in a row and column index and returns the associated complex number.
         %
-        First, we define the Z and X spider semantics, letting $\times$ be matrix multiplication\footnote{We chose to align our notation with \QLib rather than mathematical convention.}, $I_{m\times n}$ be the $m$ by $n$ identity matrix, $H$ be the Hadamard matrix, $\otimes$ the Kronecker product, and $H^{\otimes n}$ be the $n$th power of $H$ with the Kronecker product.
+        First, we define the Z and X spider semantics, letting $\cdot$ be matrix multiplication, $I_{m\times n}$ be the $m$ by $n$ identity matrix, $H$ be the Hadamard matrix, $\otimes$ the Kronecker product, and $H^{\otimes n}$ be the $n$th power of $H$ with the Kronecker product.
         %
         With spider semantics complete, we define our other base constructors, stacks and composes using the Kronecker and matrix products.
         %
@@ -340,7 +368,7 @@
                 \Case{Stack zx1 zx2} 
                   \State \Return \Call{ZX\_semantics}{zx1} $\otimes$ \Call{ZX\_semantics}{zx2} \EndCase
                 \Case{Compose zx1 zx2} 
-                  \State \Return \Call{ZX\_semantics}{zx2} $\times$ \Call{ZX\_semantics}{zx1} \EndCase
+                  \State \Return \Call{ZX\_semantics}{zx2} $\cdot$ \Call{ZX\_semantics}{zx1} \EndCase
                 \EndSwitch
             \EndFunction
           \end{algorithmic}
@@ -349,7 +377,7 @@
     \end{columns}
   \end{block}
 
-  \begin{block}{Proportionality}
+  \begin{block}{Equivalence of Diagrams}
 
     % We cannot just consider two ZX diagrams equivalent if they are syntactically equivalent but rather if they are semantically equivalent.
     Trivially two syntactically equal diagrams are to be considered equal.
@@ -375,7 +403,7 @@
     With proportionality defined, we proceed to verify different rewrite rules within the ZX calculus by proving their diagrams to be proportional.
   \end{block}
 
-  \begin{block}{Coq Notations}
+  \begin{block}{Example: Untangling Nots}
 
     To improve both the readability and the writing of ZX diagrams, we use Coq's notation system to stand in for our inductive constructions.
     %
@@ -423,7 +451,7 @@
 
 \begin{column}{\colwidth}
 
-  \begin{exampleblock}{Current Status}
+  \begin{block}{Current Status}
 
     % \paragraph*{Common gates}
     We translated common gates from the circuit model to the ZX-calculus and proved their semantic correctness.
@@ -513,13 +541,11 @@ We do have a restricted version proven where two nodes are just connected to eac
 This allows us to use \QLib's algebraic rewrites of complex matrices to combine the angles easily.
 Given the algebraic rewrite this rule is computationally very efficient.
 
-
-
-  \end{exampleblock}
+  \end{block}
 
   \begin{block}{References}
 
-    {\tiny \bibliographystyle{plain}\bibliography{poster}}
+    {\small \bibliographystyle{plain}\bibliography{poster}}
 
   \end{block}
 

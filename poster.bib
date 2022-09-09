@@ -1,16 +1,19 @@
-@misc{Coq12,
-  author = {{Coq} {Development} {Team}, The},
-  title  = {The {Coq} Reference Manual, version 8.4},
-  month  = Aug,
-  year   = {2012},
-  note   = {Available electronically at \url{http://coq.inria.fr/doc}}
+@software{Coq12,
+  author       = {The Coq Development Team},
+  title        = {The {Coq} Proof Assistant},
+  month        = oct,
+  year         = 2022,
+  publisher    = {Zenodo},
+  version      = {8.15},
+  doi          = {10.5281/zenodo.3476303},
+  url          = {https://doi.org/10.5281/zenodo.3476303}
 }
 
 @misc{QuantumLib,
-  author = {The INQWIRE Developers},
+  author = {The {INQWIRE} Developers},
   license = {MIT},
   month = {1},
-  title = {INQWIRE QuantumLib},
+  title = {{INQWIRE QuantumLib}},
   url = {https://github.com/inQWIRE/QuantumLib},
   version = {1.0.0},
   year = {2022}
@@ -70,14 +73,9 @@
 
 @inproceedings{kissinger2020Pyzx,
   author    = {Kissinger, Aleks and van de Wetering, John},
-  title     = {PyZX: Large Scale Automated Diagrammatic Reasoning},
-  year      = {2020},
-  booktitle = {Proceedings 16th International Conference on Quantum Physics and Logic, Chapman University, Orange, CA, USA., 10-14 June 2019},
-  editor    = {Coecke, Bob and Leifer, Matthew},
-  series    = {Electronic Proceedings in Theoretical Computer Science},
-  volume    = {318},
-  pages     = {229-241},
-  publisher = {Open Publishing Association},
+  title     = {{PyZX}: Large Scale Automated Diagrammatic Reasoning},
+  year      = {2019},
+  booktitle = {Quantum Physics and Logic},
   doi       = {10.4204/EPTCS.318.14}
 }
 
@@ -85,17 +83,9 @@
   author     = {Hietala, Kesha and Rand, Robert and Hung, Shih-Han and Wu, Xiaodi and Hicks, Michael},
   title      = {A Verified Optimizer for Quantum Circuits},
   year       = {2021},
-  issue_date = {January 2021},
-  publisher  = {Association for Computing Machinery},
-  address    = {New York, NY, USA},
-  volume     = {5},
-  number     = {POPL},
   doi        = {10.1145/3434318},
   abstract   = {We present VOQC, the first fully verified optimizer for quantum circuits, written using the Coq proof assistant. Quantum circuits are expressed as programs in a simple, low-level language called SQIR, a simple quantum intermediate representation, which is deeply embedded in Coq. Optimizations and other transformations are expressed as Coq functions, which are proved correct with respect to a semantics of SQIR programs. SQIR uses a semantics of matrices of complex numbers, which is the standard for quantum computation, but treats matrices symbolically in order to reason about programs that use an arbitrary number of quantum bits. SQIR's careful design and our provided automation make it possible to write and verify a broad range of optimizations in VOQC, including full-circuit transformations from cutting-edge optimizers.},
-  journal    = {Proc. ACM Program. Lang.},
-  month      = {jan},
-  articleno  = {37},
-  numpages   = {29},
+  journal    = {Principles of Programming Languages},
   keywords   = {Certified Compilation, Quantum Computing, Programming Languages, Circuit Optimization, Formal Verification}
 }
 
@@ -114,24 +104,12 @@
   copyright = {arXiv.org perpetual, non-exclusive license}
 }
 
-@inproceedings{coecke-duncan-zx,
-  doi       = {10.1007/978-3-540-70583-3_25},
+@article{coecke-duncan-zx,
   author    = {Coecke, Bob
                and Duncan, Ross},
-  editor    = {Aceto, Luca
-               and Damg{\aa}rd, Ivan
-               and Goldberg, Leslie Ann
-               and Halld{\'o}rsson, Magn{\'u}s M.
-               and Ing{\'o}lfsd{\'o}ttir, Anna
-               and Walukiewicz, Igor},
   title     = {Interacting Quantum Observables},
-  booktitle = {Automata, Languages and Programming},
-  year      = {2008},
-  publisher = {Springer Berlin Heidelberg},
-  address   = {Berlin, Heidelberg},
-  pages     = {298--310},
-  abstract  = {We formalise the constructive content of an essential feature of quantum mechanics: the interaction of complementary quantum observables, and information flow mediated by them. Using a general categorical formulation, we show that pairs of mutually unbiased quantum observables form bialgebra-like structures. We also provide an abstract account on the quantum data encoded in complex phases, and prove a normal form theorem for it. Together these enable us to describe all observables of finite dimensional Hilbert space quantum mechanics. The resulting equations suffice to perform computations with elementary quantum gates, translate between distinct quantum computational models, establish the equivalence of entangled quantum states, and simulate quantum algorithms such as the quantum Fourier transform. All these computations moreover happen within an intuitive diagrammatic calculus.},
-  isbn      = {978-3-540-70583-3}
+  journal = {Automata, Languages and Programming},
+  year      = {2008}
 }
 
 @misc{hadzihasanovic2015diagrammatic,
@@ -164,11 +142,8 @@
 	doi = {10.1007/978-3-642-12821-9_4},
   
 	year = 2010,
-	publisher = {Springer Berlin Heidelberg},
-  
-	pages = {289--355},
-  
-	author = {P. Selinger},
+    
+	author = {Peter Selinger},
   
 	title = {A Survey of Graphical Languages for Monoidal Categories},
   
