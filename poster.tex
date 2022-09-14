@@ -10,7 +10,7 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[size=a0,scale=1.2]{beamerposter}
+\usepackage[size=a0,orientation=portrait,scale=1.4]{beamerposter}
 \usetheme{gemini}
 \usecolortheme{uchicago}
 \usepackage{graphicx}
@@ -37,6 +37,9 @@
 \usepackage[normalem]{ulem}
 
 \usepackage{bussproofs}
+
+\usepackage{soul}
+
 % ====================
 % Lengths
 % ====================
@@ -75,7 +78,7 @@
 
 % use this to include logos on the left and/or right side of the header:
 \logoright{\includegraphics[height=7cm]{logos/cs-logo-white.png}}
-\logoleft{\includegraphics[height=4cm]{logos/uc-logo-white.eps}}
+% \logoleft{\includegraphics[height=3.1cm]{logos/uc-logo-white.eps}}
 
 % ====================
 % Tikz setup
@@ -141,6 +144,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 
+\usepackage{listings}
 
 % ====================
 % Custom Commands
@@ -185,6 +189,11 @@
 \newcommand{\Z}[3]{\texttt{Z\_spider\xspace#1\xspace#2\xspace#3}}
 \newcommand{\X}[3]{\texttt{X\_spider\xspace#1\xspace#2\xspace#3}}
 
+\newcommand{\hlc}[2][yellow]{{%
+    \colorlet{foo}{#1}%
+    \sethlcolor{foo}\hl{#2}}%
+}
+
 % \newcommand{\notrow}[2]
 %   {\begin{figure}[h]
 %       \begin{subfigure}{0.3\textwidth}
@@ -203,7 +212,7 @@
 
 \begin{document}
 
-\begin{frame}[t]
+\begin{frame}[t, fragile]
 \begin{columns}[t]
 \separatorcolumn
 
@@ -211,53 +220,50 @@
 
   \begin{block}{Verification and the ZX-Calculus}
 
-\begin{wrapfigure}{r}{0.15\textwidth}
-  \begin{center}
-    \includegraphics[width=0.15\textwidth]{logos/coq-logo-medium.png}
-  \end{center}
-\end{wrapfigure}
+
 
 \textbf{The Coq Proof Assistant} 
 
-  The Coq proof assistant is a programming language designed to allow us to formalize and write proof for mathematical statments.
-  %
-  Coq uses a dependent type system which allows us to write types which correspond to logical statements.
-  %
-  We can then supply a value of the specified type, which will serve as proof of the statement.
-  %
-  In this way Coq allows us to create constructive proof.
-  %
-  This proof system is not just used to prove mathematical statements.
-  %
-  The verified quantum circuit optimizer \VOQC uses the Coq proof assistant to verify that the optimizations it performs do not change the circuit semantics.
+\begin{wrapfigure}{r}{0.2\textwidth}
+  \begin{center}
+    \includegraphics[width=0.2\textwidth]{logos/coq-logo-medium.png}
+  \end{center}
+\end{wrapfigure}
 
-  \begin{wrapfigure}{r}{0.22\textwidth}
-    \centering
-    \begin{subfigure}{0.2\textwidth}
-      \centering
-      \tikzfig{Z-spider}
-      \subcaption{The Z Spider}\label{fig:Zspider}
-    \end{subfigure}
-    \begin{subfigure}{0.2\textwidth}
-      \centering
-      \tikzfig{X-spider}
-      \subcaption{The X Spider}\label{fig:Xspider}
-    \end{subfigure}
-    \caption{\centering The Core Objects of the ZX Calculus}
-    \vspace*{-10mm}
-  \end{wrapfigure}
+  The Coq proof assistant is a proof assistant and programming language for formal verification.
+  %
+  The methods of formal verification have been used to verify optimizing compilers to guarantee they are bug free.
+  %
+  The verified quantum circuit optimizer \VOQC\cite{hietala-et-al-2021-VOQC} uses the Coq proof assistant to verify that the optimizations it performs do not change the circuit semantics.
 
     \textbf{The ZX Calculus} 
+
+  \begin{wrapfigure}{r}{0.4\textwidth}
+    \centering
+    \begin{subfigure}{0.4\textwidth}
+      \centering
+      \tikzfig{Z-spider}
+%      \subcaption{The Z Spider}\label{fig:Zspider}
+    \end{subfigure}
+    \begin{subfigure}{0.4\textwidth}
+      \centering
+      \tikzfig{X-spider}
+%      \subcaption{The X Spider}\label{fig:Xspider}
+    \end{subfigure}
+%    \caption{\centering The Core Objects of the ZX Calculus}
+  \end{wrapfigure}
+
+
     
-    The ZX calculus is an intermediate representation for quantum programs.
+    The ZX calculus is a alternative approach to representing quantum programs.
     %
-    The core objects of the ZX calculus are the Z and X spiders in \Cref{fig:Zspider,fig:Xspider}, which are abstractions of both Z and X rotations.
+    The objects of the ZX calculus are the \textcolor{green}{Z spiders} (green) and \textcolor{zx_red}{X spiders} (red) to the right, which generalize the quantum mechanical Z and X rotations on qubits.
     %
     They are called ``spiders'' as they can have any number of input or output wires which gives them a spider-like appearence.
     %
     The ZX calculus comes paired with rewrite rules which are known to preserve semantics.
     %
-    Programs like PyZX\cite{kissinger2020Pyzx} take advantage of these rules in order to create quantum circuit optimizers.
+    Tools like PyZX\cite{kissinger2020Pyzx} take advantage of these rules in order to create quantum circuit optimizers.
 
 
     \textbf{Verifying ZX}
@@ -272,7 +278,7 @@
 %
   \begin{block}{Drawing Inspiration}
 
-    We reduced the basic requirements for our string diagrams to:
+    By looking at how many ways we can construct string diagrams, we have reduced them to a small number of inductive constructors
     \begin{enumerate}
       \item The unit object, which is the empty diagram,
       \item The single wire,
@@ -283,18 +289,26 @@
     \end{enumerate}
 
     \begin{figure}
-      % \centering
-      \tikzfig{swap-string}
-      \qquad
+      \centering
+      \begin{subfigure}{\textwidth}
+      \centering
       \tikzfig{compose_string}
       \qquad
       \tikzfig{parallel_string}
-      \qquad
-      \tikzfig{cap}
-      \quad
-      \tikzfig{cup}
-      \caption{\centering From left to right, the braid, sequential composition, tensor product, cap, and cup for symmetric monoidal string diagrams.}\label{fig:string}
+      \vspace{1cm}
+      \end{subfigure}
+      \begin{subfigure}{\textwidth}
+      \centering
+        \tikzfig{swap-string}
+        \qquad
+        \tikzfig{cap}
+        \quad
+        \tikzfig{cup}
+      \end{subfigure}
+      \caption{\centering Composition, tensor product, braid, cap, and cup for symmetric monoidal string diagrams.}\label{fig:string}
     \end{figure}
+
+    To obtain the full ZX calculus we will have two morphisms, the Z and X spider.
 
   \end{block}
 
@@ -309,24 +323,28 @@
     \begin{figure}[t]
       \centering
       \begin{subfigure}{\textwidth}
-      \begin{align*}
         \inferrule
           {\oftype{in out}{\(\N\)} \\ \oftype{\(\alpha\)}{\(\R\)}}
           {\oftype{\texttt{Z Spider} in out \(\alpha\)}{\ZX{in}{out}}}
-        \hspace{1em}&\hspace{1em}
+        \end{subfigure}
+        
+      \begin{subfigure}{\textwidth}
         \inferrule
           {\oftype{in out}{\(\N\)} \\ \oftype{\(\alpha\)}{\(\R\)}}
-          {\oftype{\texttt{X Spider} in out \(\alpha\)}{\ZX{in}{out}}}
-        \\
+          {\oftype{\texttt{X Spider} in out \(\alpha\)}{\ZX{in}{out}}}   
+        \end{subfigure}
+    
+      \begin{subfigure}{0.5\textwidth}
         \inferrule{ }{\oftype{\texttt{Cap}}{\ZX{0}{2}}}
-        \hspace{2em}
+      \end{subfigure}\begin{subfigure}{0.5\textwidth}
         \inferrule{ }{\oftype{\texttt{Cup}}{\ZX{2}{0}}}
-        \hspace{1em}&\hspace{1em}
+      \end{subfigure}
+      
+      \begin{subfigure}{0.5\textwidth}
         \inferrule{ }{\oftype{\texttt{Swap}}{\ZX{2}{2}}}
-        \hspace{2em}
+      \end{subfigure}\begin{subfigure}{0.5\textwidth}
         \inferrule{ }{\oftype{\texttt{Empty}}{\ZX{0}{0}}}
-      \end{align*}
-    \end{subfigure}
+      \end{subfigure}
       \begin{subfigure}{\textwidth}
         \centering
       \inferrule
@@ -346,11 +364,17 @@
     \end{center}
 
     \begin{figure}
-      \begin{tabular}{| c | c | c | c | c | c | c | c |}
+      \begin{tabular}{| c | c |}
         \hline
-        Constructor & Empty & Cap & Cup & Swap & Compose $D_1$ $D_2$ & Stack $D_1$ $D_2$ & Wire \\
+        Constructor & Notation \\
         \hline
-        Notation & \vyzxempty & $\vyzxcap$ & $\vyzxcup$ & $\vyzxswap$ & $D_1 \vyzxcompose D_2$ & $D_1 \vyzxstack D_2$ & $\vyzxwire$ \\
+        Empty & \vyzxempty \\
+        Cap & \vyzxcap \\
+        Cup & \vyzxcup \\
+        Swap & \vyzxswap \\
+        Compose & \vyzxcompose \\
+        Stack & \vyzxstack \\
+        Wire & \vyzxwire \\
         \hline
       \end{tabular}
       \caption{Coq notations for our diagrammatic constructors.}
@@ -365,7 +389,7 @@
 
     \begin{figure}
       \tikzfig{diagram-semantics}
-      \caption{The diagram semantics asignment function for inductive ZX calculus}
+      \caption{The \texttt{semantics} function for giving semantics to inductively defined ZX diagrams.}
     \end{figure}
 
     Using these semantics we define a relation $\propto$ given by
@@ -409,22 +433,28 @@
 
   \begin{block}{Example: Untangling Nots}
 
-    \(
-      \texttt{Definition CNOT\_R} := (\Z{1}{2}{0} \vyzxstack \vyzxwire) \vyzxcompose (\vyzxwire \vyzxstack \X{2}{1}{0})
-    \)
     \begin{figure}
-      \tikzfig{cnot-r}
+        \begin{subfigure}[b]{.69\textwidth}
+            $  \texttt{Definition CNOT\_R} := $ \\ 
+            \quad $ (\Z{1}{2}{0} \vyzxstack \vyzxwire) \vyzxcompose (\vyzxwire \vyzxstack \X{2}{1}{0})$
+        \end{subfigure}
+        \begin{subfigure}[b]{.3\textwidth}
+            \tikzfig{cnot-r}
+        \end{subfigure}
+    \end{figure}
+
+    \begin{figure}
+        \begin{subfigure}[b]{.69\textwidth}
+            $  \texttt{Definition CNOT\_L} := $ \\ 
+            \quad $ (\vyzxwire \vyzxstack \X{2}{1}{0}) \vyzxcompose (\Z{1}{2}{0} \vyzxstack \vyzxwire)$
+        \end{subfigure}
+        \begin{subfigure}[b]{.3\textwidth}
+            \tikzfig{cnot-l}
+        \end{subfigure}
     \end{figure}
 
     \(
-      \texttt{Definition CNOT\_L} := (\vyzxwire \vyzxstack \X{2}{1}{0}) \vyzxcompose (\Z{1}{2}{0} \vyzxstack \vyzxwire)
-    \)
-    \begin{figure}[h]
-      \tikzfig{cnot-l}
-    \end{figure}
-
-    \(
-      \texttt{Lemma CNOT\_R\_PROP\_L : }CNOT_R \propto CNOT_L
+      \texttt{Lemma CNOT\_R\_PROP\_L : } \texttt{semantics}(\texttt{CNOT}_R) = CNOT_L
     \)
     \begin{figure}[h]
       \tikzfig{cnot-prop}
@@ -485,13 +515,30 @@
        \times H))
        )
      \]
-     Using the proof automation available to \QLib, this equality can be solved automatically.
-     %
-     We can also check that we have the correct construction using the same methods to prove that our semantics match the \texttt{cnot} gate from \QLib.
+     Using the proof automation available to \QLib, this equality can be solved automatically, and will look like this:
 
-    \(
-    \texttt{Lemma CNOT\_CORRECT : }\texttt{semantics}(CNOT_R) = \texttt{cnot}
-    \)
+\begin{lstlisting}
+Lemma CNOT_R_PROP_L : 
+    ZX_semantics ZX_CNOT_R = ZX_semantics ZX_CNOT_L.
+Proof.
+  simpl.
+  rewrite wire_identity_semantics.
+  unfold_spider.
+  autorewrite with Cexp_db.
+  solve_matrix.
+Qed.
+\end{lstlisting}
+\vspace{-15mm}
+% \begin{lstlisting}
+% Lemma ZX\_CNOT\_equiv : ZX\_semantics ZX\_CNOT\_l = ZX\_semantics ZX\_CNOT\_r.
+% Proof.
+%     simpl.
+%     rewrite wire\_identity\_semantics.
+%     unfold\_spider.
+%     autorewrite with Cexp\_db.    
+%     solve\_matrix.
+% Qed.
+% \end{lstlisting}
       
 
   \end{block}
