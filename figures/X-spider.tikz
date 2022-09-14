@@ -1,4 +1,4 @@
-\begin{tikzpicture}
+\begin{tikzpicture}[scale=1.5]
 	\begin{pgfonlayer}{nodelayer}
 		\node [style=white dot] (0) at (3, -2) {$\alpha$};
 		\node [style=none] (1) at (4.5, -0.75) {};
