@@ -5,9 +5,9 @@
 
 % Node styles
 \tikzstyle{dot}=[inner sep=0.3mm, minimum width=2mm, minimum height=2mm, draw, shape=circle, font={\footnotesize}, tikzit fill=magenta]
-\tikzstyle{white dot}=[dot, fill={zx_red}, text depth=-0.2mm, tikzit category=ZH-pf, draw=black, tikzit fill={rgb,255: red,232; green,165; blue,165}, minimum width=7mm]
+\tikzstyle{white dot}=[dot, fill={zx_red}, text depth=-0.2mm, inner sep=2mm, tikzit category=ZH-pf, draw=black, tikzit fill={rgb,255: red,232; green,165; blue,165}, minimum width=7mm]
 \tikzstyle{white phase dot}=[minimum size=5mm, font={\footnotesize\boldmath}, shape=rectangle, rounded corners=2mm, inner sep=0.2mm, outer sep=-2mm, scale=0.8, tikzit shape=circle, draw=black, fill={rgb,255: red,232; green,165; blue,165}, tikzit category=ZH-pf, tikzit draw=blue]
-\tikzstyle{gray dot}=[dot, fill={zx_green}, text depth=-0.2mm, tikzit category=ZH-pf, draw=black, tikzit fill={rgb,255: red,216; green,248; blue,216}, minimum width=7mm]
+\tikzstyle{gray dot}=[dot, fill={zx_green}, text depth=-0.2mm, inner sep=2mm, tikzit category=ZH-pf, draw=black, tikzit fill={rgb,255: red,216; green,248; blue,216}, minimum width=7mm]
 \tikzstyle{gray phase dot}=[white phase dot, tikzit shape=circle, tikzit draw=blue, fill={rgb,255: red,216; green,248; blue,216}, font={\footnotesize\boldmath}]
 \tikzstyle{hadamard}=[fill=white, draw, inner sep=1.5mm, minimum height=1.5mm, minimum width=1.5mm, shape=rectangle, tikzit shape=rectangle, tikzit category=ZH-pf]
 \tikzstyle{small hadamard}=[hadamard]

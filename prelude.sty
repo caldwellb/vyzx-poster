@@ -1,0 +1,163 @@
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{braket}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{regexpatch}
+\usepackage{letltxmacro}
+\usepackage{aligned-overset}
+
+\usepackage{hyperref}
+\usepackage[noabbrev,nameinlink]{cleveref}
+
+\usepackage{enumitem}
+
+\usepackage{xspace}
+
+\usepackage{nowidow}
+\usepackage{microtype}
+
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{xcolor}
+
+\usepackage{cancel}
+
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\usepackage{wrapfig}
+
+\usepackage{svg}
+
+\usepackage{tikz}
+
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes,shapes.geometric,shapes.misc}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{decorations.markings}
+
+\tikzstyle{every picture}=[baseline=-0.25em,scale=0.5]
+
+\pgfkeys{/tikz/tikzit fill/.initial=0}
+\pgfkeys{/tikz/tikzit draw/.initial=0}
+\pgfkeys{/tikz/tikzit shape/.initial=0}
+\pgfkeys{/tikz/tikzit category/.initial=0}
+
+\newcommand{\tikzfig}[1]{%
+\IfFileExists{#1.tikz}
+  {\input{#1.tikz}}
+  {%
+    \IfFileExists{./figures/#1.tikz}
+      {\input{./figures/#1.tikz}}
+      {\tikz[baseline=-0.5em]{\node[draw=red,font=\color{red},fill=red!10!white] {\textit{#1}};}}%
+  }%
+}
+\newcommand{\ctikzfig}[1]{%
+\begin{center}\rm
+  \tikzfig{#1}
+\end{center}}
+
+\newcommand{\oftype}[2]{\text{#1}\,:\,\text{#2}}
+\newcommand{\ZX}[2]{\texttt{ZX}\,\,\text{#1}\,\,\text{#2}}
+\newcommand{\nat}{\texttt{nat}}
+
+\newcommand{\VyZX}{\textsl{Vy}\textsc{ZX}\xspace}
+\newcommand{\SQIR}{\textsc{sqir}\xspace}
+\newcommand{\QASM}{\texttt{QASM}\xspace}
+\newcommand{\QLib}{\texttt{QuantumLib}\xspace}
+\newcommand{\pyZX}{PyZX\xspace}
+\newcommand{\VOQC}{\textsc{Voqc}\xspace}
+\newcommand{\QWIRE}{\texttt{QWIRE}\xspace}
+\newcommand{\inQWIRE}{\texttt{inQWIRE}\xspace}
+\newcommand{\certiq}{\texttt{CertiQ}\xspace}
+\newcommand{\tket}{\texttt{t\(\ket{\text{ket}}\)}\xspace}
+\newcommand{\quartz}{Quartz\xspace}
+
+% links formatting
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+
+\usepackage{mathpartir}
+% Comments
+\usepackage{etoolbox}
+
+\definecolor{egreen}{rgb}{0.31, 0.78, 0.47}
+\definecolor{ate}{rgb}{0.58, 0.0, 0.83}
+\newtoggle{revision}
+%\toggletrue{revision}
+\togglefalse{revision}
+
+\iftoggle{revision}{
+    \newcommand{\rnr}[1]{\textit{\textcolor{blue}{Robert: #1}}}
+    \newcommand{\ael}[1]{\textit{\textcolor{purple}{Adrian: #1}}}
+    \newcommand{\ben}[1]{\textit{\textcolor{egreen}{Ben: #1}}}
+    \newcommand{\todo}[1]{\textit{\textcolor{red}{TODO: #1}}}
+    %%%% Refcheck
+    
+    \usepackage{refcheck}
+    
+    %%% Infrastructure    
+    \makeatletter
+    \newcommand{\refcheckize}[1]{%
+      \expandafter\let\csname @@\string#1\endcsname#1%
+      \expandafter\DeclareRobustCommand\csname relax\string#1\endcsname[1]{%
+        \csname @@\string#1\endcsname{##1}\wrtusdrf{##1}}%
+      \expandafter\let\expandafter#1\csname relax\string#1\endcsname
+    }
+    \makeatother
+    %%%
+    
+    %%% Now we add the reference commands we want refcheck to be aware of
+    \refcheckize{\cref}
+    \refcheckize{\Cref}
+}{
+    \newcommand{\rnr}[1]{}
+    \newcommand{\ael}[1]{}
+    \newcommand{\ben}[1]{}
+    \newcommand{\todo}[1]{}
+}
+
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{background, edgelayer, nodelayer, main}
+\tikzstyle{none}=[inner sep=0mm]
+\tikzstyle{every loop}=[]
+\tikzstyle{mark coordinate}=[inner sep=0pt,outer sep=0pt,minimum size=3pt,fill=black,circle]
+\input{zh.tikzdefs}
+\input{zh.tikzstyles}
+
+
+\algnewcommand\algorithmicswitch{\textbf{switch}}
+\algnewcommand\algorithmiccase{\textbf{case}}
+\algnewcommand\algorithmicassert{\texttt{assert}}
+
+\algdef{SE}[SWITCH]{Switch}{EndSwitch}[1]{\algorithmicswitch\ #1\ \algorithmicdo}{\algorithmicend\ \algorithmicswitch}%
+\algdef{SE}[CASE]{Case}{EndCase}[1]{\algorithmiccase\ #1}{\algorithmicend\ \algorithmiccase}%
+\algtext*{EndSwitch}%
+\algtext*{EndCase}%
+
+\makeatletter
+\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+\makeatother
+
+\newcommand{\mailtodomain}[1]{\href{mailto:#1}{\nolinkurl{#1}}}
+
